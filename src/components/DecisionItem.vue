@@ -1,30 +1,20 @@
 <template>
-  <div class="home">
-    i18nTEST: {{ t('teest') }}
-    <img alt="Vue logo" src="../assets/logo.png">
-    <DecisionItem />
-    <DecisionItem />
-    <DecisionItem />
-    <DecisionItem />
+  <div>
+    <RadarChart :chart-data="chartData"/>
+
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import DecisionItem from '@/components/DecisionItem.vue'
-import { useI18n } from 'vue-i18n' // @ is an alias to /src
+import RadarChart from '@/components/RadarChart.vue'
 
 export default defineComponent({
-  name: 'Home',
+  name: 'DecisionItem',
   components: {
-    DecisionItem
+    RadarChart
   },
   setup () {
-    const { t } = useI18n({
-      inheritLocale: true,
-      useScope: 'local'
-    })
-
     const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     const datasets = [
       {
@@ -35,7 +25,11 @@ export default defineComponent({
     ]
     const chartData = { labels, datasets }
 
-    return { t, chartData }
+    return { chartData }
   }
 })
 </script>
+
+<style scoped>
+
+</style>
