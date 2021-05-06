@@ -1,11 +1,19 @@
 <template>
   <div class="home">
+    <el-button type="primary">el-button</el-button>
+
     i18nTEST: {{ t('teest') }}
-    <img alt="Vue logo" src="../assets/logo.png">
-    <DecisionItem />
-    <DecisionItem />
-    <DecisionItem />
-    <DecisionItem />
+    <el-row :gutter="20">
+      <el-col :span="8">
+        <DecisionItem />
+      </el-col>
+      <el-col :span="8">
+        <DecisionItem />
+      </el-col>
+      <el-col :span="8">
+        <DecisionItem />
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -39,3 +47,6 @@ export default defineComponent({
   }
 })
 </script>
+
+<style>
+</style>

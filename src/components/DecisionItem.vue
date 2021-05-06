@@ -1,6 +1,6 @@
 <template>
   <div>
-    <RadarChart :chart-data="chartData"/>
+    <RadarChart :chart-data="chartData" :chart-options="chartOptions"/>
 
   </div>
 </template>
@@ -15,17 +15,38 @@ export default defineComponent({
     RadarChart
   },
   setup () {
-    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    const labels = ['January', 'February', 'March', 'April', 'May']
     const datasets = [
       {
         label: 'GitHub Commits',
         backgroundColor: '#f87979',
-        data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+        data: [40, 20, 30, 80, 10]
       }
     ]
     const chartData = { labels, datasets }
 
-    return { chartData }
+    const chartOptions = {
+      scale: {
+        ticks: {
+          beginAtZero: true,
+          min: 0,
+          max: 60,
+          stepSize: 20,
+          userCallback: function (value: number/* , index, values */) {
+            // Default callback
+            return value + 'asdadsd'
+          }
+        },
+        pointLabels: {
+          fontSize: 18
+        }
+      },
+      legend: {
+        position: 'left'
+      }
+    }
+
+    return { chartData, chartOptions }
   }
 })
 </script>
