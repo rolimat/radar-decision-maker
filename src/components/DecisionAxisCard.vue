@@ -15,7 +15,7 @@
     </template>
     <div v-for="val in axis.values" :key="val" class="text item">
       <span>{{ val }}</span>
-      <span><i class="el-icon-close" /></span>
+      <span @click="removeValue(val)"><i class="el-icon-close" /></span>
     </div>
     <div v-if="isAxesValuesEditing">
       <el-input
@@ -38,6 +38,7 @@
 <script lang="ts">
 import { defineComponent, ref, PropType, watch } from 'vue'
 import { Axis } from '@/types'
+import { updateAxisName, addAxisValue, removeAxisValue } from '@/shareables/axisSchema'
 
 export default defineComponent({
   name: 'DecisionAxisCard',
@@ -47,13 +48,12 @@ export default defineComponent({
       required: true
     }
   },
-  setup (props, { emit }) {
-    // TODO: compartir el estado de axis y evitar los eventos???
+  setup (props) {
     const isAxesValuesEditing = ref(false)
     const editingAxisValueName = ref('')
     const axisName = ref(props.axis.name)
     watch(axisName, (name) => {
-      emit('updateAxisName', { name, id: props.axis.id })
+      updateAxisName({ name, id: props.axis.id })
     })
 
     const editAxesValues = () => {
@@ -61,10 +61,13 @@ export default defineComponent({
       isAxesValuesEditing.value = true
     }
     const confirmValue = () => {
-      emit('addAxisValue', { value: editingAxisValueName.value, id: props.axis.id })
+      addAxisValue({ value: editingAxisValueName.value, id: props.axis.id })
       isAxesValuesEditing.value = false
     }
-    return { axisName, confirmValue, editAxesValues, editingAxisValueName, isAxesValuesEditing }
+    const removeValue = (value: string) => {
+      removeAxisValue({ value, id: props.axis.id })
+    }
+    return { axisName, confirmValue, editAxesValues, removeValue, editingAxisValueName, isAxesValuesEditing }
   }
 })
 </script>
