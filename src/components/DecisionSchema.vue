@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="20">
       <el-col
-        v-for="axis in axisSchema"
+        v-for="axis in axisSchemaState"
         :key="axis.id"
         :span="6"
       >
@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { axisSchema, addAxis } from '@/shareables/axis-schema'
+import { axisSchemaState, addAxis } from '@/shareables/axis-schema-state'
 import DecisionAxisCard from '@/components/DecisionAxisCard.vue'
 
 export default defineComponent({
@@ -32,7 +32,7 @@ export default defineComponent({
   components: { DecisionAxisCard },
   setup () {
     return {
-      axisSchema,
+      axisSchemaState,
       addAxis
     }
   }

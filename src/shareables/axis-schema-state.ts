@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 /* eslint-enable */
 import { Axis } from '@/types'
 
-export const axisSchema = ref<Axis[]>([{
+export const axisSchemaState = ref<Axis[]>([{
   id: '1',
   name: 'pepito',
   values: ['a', 'b']
@@ -21,16 +21,16 @@ export const axisSchema = ref<Axis[]>([{
   values: ['a', 'b']
 }])
 export const removeAxis = (id: string) => {
-  axisSchema.value = axisSchema.value.filter((i: Axis) => i.id !== id)
+  axisSchemaState.value = axisSchemaState.value.filter((i: Axis) => i.id !== id)
 }
 export const addAxis = () => {
-  axisSchema.value.push({ id: uuidv4(), name: '', values: [] })
+  axisSchemaState.value.push({ id: uuidv4(), name: '', values: [] })
 }
 export const addAxisValue = (data: {
   id: string,
   value: string,
 }) => {
-  const axisToModify = axisSchema.value.find((i: Axis) => i.id === data.id)
+  const axisToModify = axisSchemaState.value.find((i: Axis) => i.id === data.id)
   if (axisToModify) {
     const values = axisToModify.values
     values.push(data.value)
@@ -41,12 +41,12 @@ export const removeAxisValue = (data: {
   id: string,
   value: string,
 }) => {
-  const axisToModify = axisSchema.value.find((i: Axis) => i.id === data.id)
+  const axisToModify = axisSchemaState.value.find((i: Axis) => i.id === data.id)
   if (axisToModify) {
     axisToModify.values = axisToModify.values.filter((val: string) => val !== data.value)
   }
 }
 
 export const getAxisById = (id: string) => {
-  return axisSchema.value.find((i: Axis) => i.id === id)
+  return axisSchemaState.value.find((i: Axis) => i.id === id)
 }
