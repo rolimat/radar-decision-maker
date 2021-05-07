@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { axisSchema, addAxis } from '@/shareables/axisSchema'
+import { axisSchema, addAxis } from '@/shareables/axis-schema'
 import DecisionAxisCard from '@/components/DecisionAxisCard.vue'
 
 export default defineComponent({

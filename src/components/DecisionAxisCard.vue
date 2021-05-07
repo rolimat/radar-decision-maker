@@ -36,8 +36,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, watch, computed } from 'vue'
-import { getAxisById, removeAxis, addAxisValue, removeAxisValue } from '@/shareables/axisSchema'
+import { defineComponent, ref, computed } from 'vue'
+import { getAxisById, removeAxis, addAxisValue, removeAxisValue } from '@/shareables/axis-schema'
 
 export default defineComponent({
   name: 'DecisionAxisCard',

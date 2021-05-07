@@ -21,7 +21,7 @@ export const axisSchema = ref<Axis[]>([{
   values: ['a', 'b']
 }])
 export const removeAxis = (id: string) => {
-  axisSchema.value = axisSchema.value.filter((i) => i.id !== id)
+  axisSchema.value = axisSchema.value.filter((i: Axis) => i.id !== id)
 }
 export const addAxis = () => {
   axisSchema.value.push({ id: uuidv4(), name: '', values: [] })
@@ -30,7 +30,7 @@ export const addAxisValue = (data: {
   id: string,
   value: string,
 }) => {
-  const axisToModify = axisSchema.value.find((i) => i.id === data.id)
+  const axisToModify = axisSchema.value.find((i: Axis) => i.id === data.id)
   if (axisToModify) {
     const values = axisToModify.values
     values.push(data.value)
@@ -41,12 +41,12 @@ export const removeAxisValue = (data: {
   id: string,
   value: string,
 }) => {
-  const axisToModify = axisSchema.value.find((i) => i.id === data.id)
+  const axisToModify = axisSchema.value.find((i: Axis) => i.id === data.id)
   if (axisToModify) {
     axisToModify.values = axisToModify.values.filter((val: string) => val !== data.value)
   }
 }
 
 export const getAxisById = (id: string) => {
-  return axisSchema.value.find((i) => i.id === id)
+  return axisSchema.value.find((i: Axis) => i.id === id)
 }
