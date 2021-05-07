@@ -4,18 +4,18 @@
       <div class="card-header">
         <el-input
           placeholder="Axis name"
-          v-model="axisName"
+          v-model="axis.name"
           clearable
         />
         <i
-          @click="$emit('removeAxis', axis.id)"
+          @click="removeAxis(id)"
           class="el-icon-delete"
         />
       </div>
     </template>
-    <div v-for="val in axis.values" :key="val" class="text item">
-      <span>{{ val }}</span>
-      <span @click="removeValue(val)"><i class="el-icon-close" /></span>
+    <div v-for="value in axis.values" :key="value" class="text item">
+      <span>{{ value }}</span>
+      <span @click="removeAxisValue({value, id})"><i class="el-icon-close" /></span>
     </div>
     <div v-if="isAxesValuesEditing">
       <el-input
@@ -36,24 +36,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, watch } from 'vue'
-import { Axis } from '@/types'
-import { updateAxisName, addAxisValue, removeAxisValue } from '@/shareables/axisSchema'
+import { defineComponent, ref, PropType, watch, computed } from 'vue'
+import { getAxisById, removeAxis, addAxisValue, removeAxisValue } from '@/shareables/axisSchema'
 
 export default defineComponent({
   name: 'DecisionAxisCard',
   props: {
-    axis: {
-      type: Object as PropType<Axis>,
+    id: {
+      type: String,
       required: true
     }
   },
   setup (props) {
     const isAxesValuesEditing = ref(false)
     const editingAxisValueName = ref('')
-    const axisName = ref(props.axis.name)
-    watch(axisName, (name) => {
-      updateAxisName({ name, id: props.axis.id })
+    const axis = computed(() => {
+      return getAxisById(props.id)
     })
 
     const editAxesValues = () => {
@@ -61,13 +59,10 @@ export default defineComponent({
       isAxesValuesEditing.value = true
     }
     const confirmValue = () => {
-      addAxisValue({ value: editingAxisValueName.value, id: props.axis.id })
+      addAxisValue({ value: editingAxisValueName.value, id: props.id })
       isAxesValuesEditing.value = false
     }
-    const removeValue = (value: string) => {
-      removeAxisValue({ value, id: props.axis.id })
-    }
-    return { axisName, confirmValue, editAxesValues, removeValue, editingAxisValueName, isAxesValuesEditing }
+    return { axis, confirmValue, editAxesValues, removeAxisValue, editingAxisValueName, isAxesValuesEditing, removeAxis }
   }
 })
 </script>

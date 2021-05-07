@@ -7,7 +7,7 @@
         :span="6"
       >
         <decision-axis-card
-         :axis="axis"
+         :id="axis.id"
         />
       </el-col>
       <el-col :span="6">
@@ -31,45 +31,6 @@ export default defineComponent({
   name: 'DecisionSchema',
   components: { DecisionAxisCard },
   setup () {
-    // const axes = ref<Axis[]>([{
-    //   id: '1',
-    //   name: 'pepito',
-    //   values: ['a', 'b']
-    // },
-    // {
-    //   id: '2',
-    //   name: '231',
-    //   values: ['a', 'b']
-    // },
-    // {
-    //   id: '3',
-    //   name: 'fdsfsd',
-    //   values: ['a', 'b']
-    // }])
-    // const removeAxis = (id: string) => {
-    //   axes.value = axes.value.filter((i) => i.id !== id)
-    // }
-    // const addAxis = () => {
-    //   axes.value.push({ id: uuidv4(), name: '', values: [] })
-    // }
-    // const updateAxisName = (event: {
-    //   id: string,
-    //   name: string,
-    // }) => {
-    //   const axisToModify = axes.value.find((i) => i.id === event.id) || { name: '' }
-    //   axisToModify.name = event.name
-    // }
-    // const addAxisValue = (event: {
-    //   id: string,
-    //   value: string,
-    // }) => {
-    //   const axisToModify = axes.value.find((i) => i.id === event.id)
-    //   if (axisToModify) {
-    //     const values = axisToModify.values
-    //     values.push(event.value)
-    //   }
-    //   // axisToModify.values.push('asd')
-    // }
     return {
       axisSchema,
       addAxis
