@@ -7,14 +7,12 @@
     <decision-schema />
 
     <el-row :gutter="20">
-      <el-col :span="8">
-        <DecisionItem />
-      </el-col>
-      <el-col :span="8">
-        <DecisionItem />
-      </el-col>
-      <el-col :span="8">
-        <DecisionItem />
+      <el-col
+        v-for="decision in decisionState"
+        :key="decision.id"
+        :span="8"
+      >
+        <DecisionItem :decision="decision" />
       </el-col>
     </el-row>
   </div>
@@ -23,6 +21,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n' // @ is an alias to /src
+import { decisionState } from '@/shareables/decission-state'
 import DecisionItem from '@/components/DecisionItem.vue'
 import DecisionSchema from '@/components/DecisionSchema.vue'
 
@@ -38,17 +37,7 @@ export default defineComponent({
       useScope: 'local'
     })
 
-    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    const datasets = [
-      {
-        label: 'GitHub Commits',
-        backgroundColor: '#f87979',
-        data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
-      }
-    ]
-    const chartData = { labels, datasets }
-
-    return { t, chartData }
+    return { t, decisionState }
   }
 })
 </script>

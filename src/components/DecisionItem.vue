@@ -5,21 +5,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import RadarChart from '@/components/RadarChart.vue'
+import { DecisionChart } from '@/types'
 
 export default defineComponent({
   name: 'DecisionItem',
   components: {
     RadarChart
   },
-  setup () {
-    const labels = ['January', 'February', 'March', 'April', 'May']
+  props: {
+    decision: {
+      type: Object as PropType<DecisionChart>,
+      required: true
+    }
+  },
+  setup (props) {
+    const labels = props.decision.values.map((v) => v.label)
     const datasets = [
       {
-        label: 'GitHub Commits',
+        label: props.decision.name,
         backgroundColor: '#f87979',
-        data: [40, 20, 30, 80, 10]
+        data: props.decision.values.map((v) => v.numericValue)
       }
     ]
     const chartData = { labels, datasets }
@@ -29,8 +36,8 @@ export default defineComponent({
         ticks: {
           beginAtZero: true,
           min: 0,
-          max: 60,
-          stepSize: 20,
+          max: 100,
+          stepSize: 30,
           userCallback: function (value: number/* , index, values */) {
             // Default callback
             return value + 'asdadsd'
