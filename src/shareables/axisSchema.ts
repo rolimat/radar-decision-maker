@@ -2,8 +2,8 @@ import { ref } from 'vue'
 /* eslint-disable */
 // @ts-ignore
 import { v4 as uuidv4 } from 'uuid'
-import { Axis } from '@/types'
 /* eslint-enable */
+import { Axis } from '@/types'
 
 export const axisSchema = ref<Axis[]>([{
   id: '1',
