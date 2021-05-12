@@ -5,30 +5,21 @@
     i18nTEST: {{ t('teest') }}
 
     <decision-schema />
-
-    <el-row :gutter="20">
-      <el-col
-        v-for="decision in decisionState"
-        :key="decision.id"
-        :span="8"
-      >
-        <DecisionItem :decisionId="decision.id" />
-      </el-col>
-    </el-row>
+    <decision-item-list />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, provide } from 'vue'
 import { useI18n } from 'vue-i18n' // @ is an alias to /src
-import DecisionItem from '@/components/DecisionItem.vue'
-import DecisionSchema from '@/components/DecisionSchema.vue'
 import { Axis, DecisionChart } from '@/types'
+import DecisionSchema from '@/components/DecisionSchema.vue'
+import DecisionItemList from '@/components/DecisionItemList.vue'
 
 export default defineComponent({
   name: 'Home',
   components: {
-    DecisionItem,
+    DecisionItemList,
     DecisionSchema
   },
   setup () {
@@ -125,7 +116,7 @@ export default defineComponent({
     provide('axisSchemaState', axisSchemaState)
     provide('decisionState', decisionState)
 
-    return { t, decisionState }
+    return { t }
   }
 })
 </script>
