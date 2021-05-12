@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, provide } from 'vue'
+import { defineComponent, onMounted, provide, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n' // @ is an alias to /src
 import { Axis, DecisionChart } from '@/types'
 import DecisionSchema from '@/components/DecisionSchema.vue'
@@ -28,93 +28,31 @@ export default defineComponent({
       useScope: 'local'
     })
 
-    const axisSchemaState = ref<Axis[]>([{
-      id: '1',
-      name: 'pepito',
-      values: ['a', 'b']
-    },
-    {
-      id: '2',
-      name: 'manolo',
-      values: ['c', 'd']
-    },
-    {
-      id: '3',
-      name: 'pedro',
-      values: ['e', 'f']
-    }])
-
-    const decisionState = ref<DecisionChart[]>([{
-      id: 'aaaaa',
-      name: 'aaaaa',
-      values: [
-        {
-          axisId: '1',
-          label: 'pepito',
-          value: 'a',
-          numericValue: 20
-        },
-        {
-          axisId: '2',
-          label: 'manolo',
-          value: 'sdas',
-          numericValue: 25
-        },
-        {
-          axisId: '3',
-          label: 'pedro',
-          value: 'sdas',
-          numericValue: 30
-        }
-      ]
-    },
-    {
-      id: 'bbbbb',
-      name: 'bbbbbb',
-      values: [{
-        axisId: '1',
-        label: 'pepito',
-        value: 'sdas',
-        numericValue: 40
-      },
-      {
-        axisId: '2',
-        label: 'manolo',
-        value: 'sdas',
-        numericValue: 45
-      },
-      {
-        axisId: '3',
-        label: 'pedro',
-        value: 'sdas',
-        numericValue: 50
-      }]
-    },
-    {
-      id: 'ccccc',
-      name: 'ccccc',
-      values: [{
-        axisId: '1',
-        label: 'pepito',
-        value: 'sdas',
-        numericValue: 60
-      },
-      {
-        axisId: '2',
-        label: 'manolo',
-        value: 'sdas',
-        numericValue: 65
-      },
-      {
-        axisId: '3',
-        label: 'pedro',
-        value: 'sdas',
-        numericValue: 70
-      }]
-    }])
+    const axisSchemaState = ref<Axis[]>([])
+    const decisionState = ref<DecisionChart[]>([])
 
     provide('axisSchemaState', axisSchemaState)
     provide('decisionState', decisionState)
+
+    watchEffect(() => {
+      if (axisSchemaState.value.length) {
+        localStorage.setItem('axisSchemaState', JSON.stringify(axisSchemaState.value))
+      }
+      if (decisionState.value.length) {
+        localStorage.setItem('decisionState', JSON.stringify(decisionState.value))
+      }
+    })
+
+    onMounted(() => {
+      const storedDecisonState = localStorage.getItem('decisionState')
+      if (storedDecisonState) {
+        decisionState.value = JSON.parse(storedDecisonState)
+      }
+      const storedAxisSchemaState = localStorage.getItem('axisSchemaState')
+      if (storedAxisSchemaState) {
+        axisSchemaState.value = JSON.parse(storedAxisSchemaState)
+      }
+    })
 
     return { t }
   }
