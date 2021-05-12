@@ -41,7 +41,7 @@
 import { defineComponent, inject, onMounted, ref } from 'vue'
 import { Axis, AxisValue, DecisionChart } from '@/types'
 import { generateUuid } from '@/common/uuid'
-import { getNumericValueForAxis } from '@/common/axis'
+import { generateNewAxisValue, getNumericValueForAxis } from '@/common/axis'
 export default defineComponent({
   name: 'DecisionItemAdd',
   setup (props, { emit }) {
@@ -78,14 +78,7 @@ export default defineComponent({
     }
     onMounted(() => {
       if (axisSchemaState.value) {
-        const values = axisSchemaState.value.map((axis: Axis) => {
-          return {
-            axisId: axis.id,
-            label: axis.name,
-            value: axis.values[0],
-            numericValue: getNumericValueForAxis(axis.values[0], axis)
-          }
-        })
+        const values = axisSchemaState.value.map((axis: Axis) => generateNewAxisValue(axis))
         newDecision.value = { id: generateUuid(), name: '', values }
       }
     })
