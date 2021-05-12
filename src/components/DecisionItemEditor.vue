@@ -42,6 +42,7 @@
 <script lang="ts">
 import { defineComponent, ref, inject, computed, PropType } from 'vue'
 import { Axis, AxisValue, DecisionChart } from '@/types'
+import { getNumericValueForAxis } from '@/common/axis'
 export default defineComponent({
   name: 'DecisionItemEditor',
   props: {
@@ -68,9 +69,7 @@ export default defineComponent({
           d.value = value
           if (axisSchemaState.value) {
             const axis = axisSchemaState.value.find((axis: Axis) => axis.id === axisId)
-            const valueIndex = axis ? axis.values.indexOf(value) + 1 : 1
-            const numValues = axis ? axis.values.length : 1
-            d.numericValue = Math.round((valueIndex / numValues) * 100)
+            d.numericValue = getNumericValueForAxis(value, axis)
           }
         }
         return d
