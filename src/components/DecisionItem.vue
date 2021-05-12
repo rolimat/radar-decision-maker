@@ -9,12 +9,10 @@
             clearable
           />
           <i
-            v-if="isEditing"
             @click="confirmEdit"
             class="el-icon-check"
           />
           <i
-            v-if="isEditing"
             @click="discardEdit"
             class="el-icon-close"
           />
@@ -26,6 +24,7 @@
             class="el-icon-edit"
           />
           <i
+            @click="removeDecisionItem"
             class="el-icon-delete"
           />
         </template>
@@ -44,7 +43,7 @@
 <script lang="ts">
 import { defineComponent, ref, inject, computed } from 'vue'
 import RadarChart from '@/components/RadarChart.vue'
-import { DecisionChart } from '@/types'
+import { Axis, DecisionChart } from '@/types'
 
 export default defineComponent({
   name: 'DecisionItem',
@@ -89,8 +88,13 @@ export default defineComponent({
     const scaleCallback = (value: number/* , index, values */) => {
       return value + 'asdadsd'
     }
+    const removeDecisionItem = () => {
+      if (decisionState.value) {
+        decisionState.value = decisionState.value.filter((d: DecisionChart) => d.id !== props.decisionId)
+      }
+    }
 
-    return { decisionName, isEditing, confirmEdit, discardEdit, enableEdit, chartData, scaleCallback }
+    return { decisionName, isEditing, confirmEdit, discardEdit, enableEdit, chartData, scaleCallback, removeDecisionItem }
   }
 })
 </script>
