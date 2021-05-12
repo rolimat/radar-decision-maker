@@ -23,14 +23,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { axisSchemaState, addAxis } from '@/shareables/axis-schema-state'
+import { defineComponent, inject, ref } from 'vue'
+import { generateUuid } from '@/common/uuid'
 import DecisionAxisCard from '@/components/DecisionAxisCard.vue'
+import { Axis } from '@/types'
 
 export default defineComponent({
   name: 'DecisionSchema',
   components: { DecisionAxisCard },
   setup () {
+    const axisSchemaState = inject('axisSchemaState', ref<Axis[]>())
+    const addAxis = () => {
+      if (axisSchemaState.value) {
+        axisSchemaState.value.push({ id: generateUuid(), name: '', values: [] })
+      }
+    }
     return {
       axisSchemaState,
       addAxis

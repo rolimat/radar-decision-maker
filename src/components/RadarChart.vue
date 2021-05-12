@@ -10,9 +10,31 @@ export default defineComponent({
       type: Object,
       required: true
     },
-    chartOptions: {
-      type: Object,
-      required: false
+    scaleCallback: {
+      type: Function,
+      default: () => (value) => value
+    }
+  },
+  computed: {
+    chartOptions () {
+      return {
+        responsive: true,
+        scale: {
+          ticks: {
+            beginAtZero: true,
+            min: 0,
+            max: 100,
+            stepSize: 30,
+            userCallback: this.scaleCallback
+          },
+          pointLabels: {
+            fontSize: 18
+          }
+        },
+        legend: {
+          position: 'bottom'
+        }
+      }
     }
   },
   mounted () {

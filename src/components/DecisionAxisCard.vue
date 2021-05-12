@@ -8,14 +8,14 @@
           clearable
         />
         <i
-          @click="removeAxis(id)"
+          @click="removeAxis"
           class="el-icon-delete"
         />
       </div>
     </template>
     <div v-for="value in axis.values" :key="value" class="text item">
       <span>{{ value }}</span>
-      <span @click="removeAxisValue({value, id})"><i class="el-icon-close" /></span>
+      <span @click="removeAxisValue(value)"><i class="el-icon-close" /></span>
     </div>
     <div v-if="isAxesValuesEditing">
       <el-input
@@ -36,8 +36,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
-import { getAxisById, removeAxis, addAxisValue, removeAxisValue } from '@/shareables/axis-schema-state'
+import { defineComponent, ref, computed, inject } from 'vue'
+import { Axis } from '@/types'
 
 export default defineComponent({
   name: 'DecisionAxisCard',
@@ -50,8 +50,13 @@ export default defineComponent({
   setup (props) {
     const isAxesValuesEditing = ref(false)
     const editingAxisValueName = ref('')
+    const axisSchemaState = inject('axisSchemaState', ref<Axis[]>())
+
     const axis = computed(() => {
-      return getAxisById(props.id)
+      if (axisSchemaState.value) {
+        return axisSchemaState.value.find((axis: Axis) => axis.id === props.id)
+      }
+      return {}
     })
 
     const editAxesValues = () => {
@@ -59,10 +64,34 @@ export default defineComponent({
       isAxesValuesEditing.value = true
     }
     const confirmValue = () => {
-      addAxisValue({ value: editingAxisValueName.value, id: props.id })
+      if (axisSchemaState.value) {
+        axisSchemaState.value = axisSchemaState.value.map((axis: Axis) => {
+          if (axis.id === props.id) {
+            axis.values.push(editingAxisValueName.value)
+          }
+          return axis
+        })
+      }
+
       isAxesValuesEditing.value = false
     }
-    return { axis, confirmValue, editAxesValues, removeAxisValue, editingAxisValueName, isAxesValuesEditing, removeAxis }
+    const removeAxisValue = (toRemoveValue: string) => {
+      if (axisSchemaState.value) {
+        axisSchemaState.value = axisSchemaState.value.map((axis: Axis) => {
+          if (axis.id === props.id) {
+            axis.values = axis.values.filter((val: string) => val !== toRemoveValue)
+          }
+          return axis
+        })
+      }
+    }
+    const removeAxis = () => {
+      if (axisSchemaState.value) {
+        axisSchemaState.value = axisSchemaState.value.filter((axis: Axis) => axis.id !== props.id)
+      }
+    }
+
+    return { axis, confirmValue, editAxesValues, removeAxisValue, removeAxis, editingAxisValueName, isAxesValuesEditing }
   }
 })
 </script>

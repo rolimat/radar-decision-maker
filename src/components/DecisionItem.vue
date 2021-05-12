@@ -1,11 +1,48 @@
 <template>
-  <div>
-    <RadarChart :chart-data="chartData" :chart-options="chartOptions"/>
-  </div>
+  <el-card class="box-card">
+    <template #header>
+      <div class="card-header">
+        <template v-if="isEditing">
+          <el-input
+            v-model="decisionName"
+            placeholder="Decision name"
+            clearable
+          />
+          <i
+            v-if="isEditing"
+            @click="confirmEdit"
+            class="el-icon-check"
+          />
+          <i
+            v-if="isEditing"
+            @click="discardEdit"
+            class="el-icon-close"
+          />
+        </template>
+        <template v-else>
+          <span>{{ decisionName }}</span>
+          <i
+            @click="enableEdit"
+            class="el-icon-edit"
+          />
+          <i
+            class="el-icon-delete"
+          />
+        </template>
+
+      </div>
+    </template>
+    <div v-if="isEditing">
+      EDICION!!!
+    </div>
+    <div v-else>
+      <RadarChart :chart-data="chartData" :scale-callback="scaleCallback"/>
+    </div>
+  </el-card>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, ref, inject, computed } from 'vue'
 import RadarChart from '@/components/RadarChart.vue'
 import { DecisionChart } from '@/types'
 
@@ -15,44 +52,45 @@ export default defineComponent({
     RadarChart
   },
   props: {
-    decision: {
-      type: Object as PropType<DecisionChart>,
+    decisionId: {
+      type: String,
       required: true
     }
   },
   setup (props) {
-    const labels = props.decision.values.map((v) => v.label)
-    const datasets = [
-      {
-        label: props.decision.name,
-        backgroundColor: '#f87979',
-        data: props.decision.values.map((v) => v.numericValue)
-      }
-    ]
-    const chartData = { labels, datasets }
-
-    const chartOptions = {
-      scale: {
-        ticks: {
-          beginAtZero: true,
-          min: 0,
-          max: 100,
-          stepSize: 30,
-          userCallback: function (value: number/* , index, values */) {
-            // Default callback
-            return value + 'asdadsd'
+    const isEditing = ref(false)
+    const decisionState = inject('decisionState', ref<DecisionChart[]>())
+    const defaultDecisionChart = { name: '', values: [{ label: '', value: '', numericValue: 0 }] }
+    const decision = decisionState.value ? decisionState.value.find((d: DecisionChart) => d.id === props.decisionId) || defaultDecisionChart : defaultDecisionChart
+    const decisionName = ref(decision.name)
+    const chartData = computed(() => {
+      return {
+        labels: decision.values.map((v) => v.label),
+        datasets: [
+          {
+            label: decision.name,
+            backgroundColor: '#f87979',
+            data: decision.values.map((v) => v.numericValue)
           }
-        },
-        pointLabels: {
-          fontSize: 18
-        }
-      },
-      legend: {
-        position: 'left'
+        ]
       }
+    })
+    const enableEdit = () => {
+      isEditing.value = true
+    }
+    const confirmEdit = () => {
+      decision.name = decisionName.value
+      isEditing.value = false
+    }
+    const discardEdit = () => {
+      isEditing.value = false
     }
 
-    return { chartData, chartOptions }
+    const scaleCallback = (value: number/* , index, values */) => {
+      return value + 'asdadsd'
+    }
+
+    return { decisionName, isEditing, confirmEdit, discardEdit, enableEdit, chartData, scaleCallback }
   }
 })
 </script>
