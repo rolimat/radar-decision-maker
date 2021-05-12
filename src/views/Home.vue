@@ -44,13 +44,13 @@ export default defineComponent({
     },
     {
       id: '2',
-      name: '231',
-      values: ['a', 'b']
+      name: 'manolo',
+      values: ['c', 'd']
     },
     {
       id: '3',
-      name: 'fdsfsd',
-      values: ['a', 'b']
+      name: 'pedro',
+      values: ['e', 'f']
     }])
 
     const decisionState = ref<DecisionChart[]>([{
@@ -58,17 +58,20 @@ export default defineComponent({
       name: 'aaaaa',
       values: [
         {
-          label: 'aaa',
-          value: 'sdas',
+          axisId: '1',
+          label: 'pepito',
+          value: 'a',
           numericValue: 20
         },
         {
-          label: 'abb',
+          axisId: '2',
+          label: 'manolo',
           value: 'sdas',
           numericValue: 25
         },
         {
-          label: 'acc',
+          axisId: '3',
+          label: 'pedro',
           value: 'sdas',
           numericValue: 30
         }
@@ -78,17 +81,20 @@ export default defineComponent({
       id: 'bbbbb',
       name: 'bbbbbb',
       values: [{
-        label: 'baa',
+        axisId: '1',
+        label: 'pepito',
         value: 'sdas',
         numericValue: 40
       },
       {
-        label: 'bbb',
+        axisId: '2',
+        label: 'manolo',
         value: 'sdas',
         numericValue: 45
       },
       {
-        label: 'bcc',
+        axisId: '3',
+        label: 'pedro',
         value: 'sdas',
         numericValue: 50
       }]
@@ -97,17 +103,20 @@ export default defineComponent({
       id: 'ccccc',
       name: 'ccccc',
       values: [{
-        label: 'caa',
+        axisId: '1',
+        label: 'pepito',
         value: 'sdas',
         numericValue: 60
       },
       {
-        label: 'cbb',
+        axisId: '2',
+        label: 'manolo',
         value: 'sdas',
         numericValue: 65
       },
       {
-        label: 'ccc',
+        axisId: '3',
+        label: 'pedro',
         value: 'sdas',
         numericValue: 70
       }]

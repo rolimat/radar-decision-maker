@@ -1,4 +1,5 @@
 export interface AxisValue {
+  axisId: string,
   label: string,
   value: string,
   numericValue: number

@@ -32,7 +32,25 @@
       </div>
     </template>
     <div v-if="isEditing">
-      EDICION!!!
+      <div v-for="value in decision.values" :key="value.label">
+        <span>{{ value.label }}:</span>
+        <span>
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              {{ value.value }}<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item>Action 1</el-dropdown-item>
+                <el-dropdown-item>Action 2</el-dropdown-item>
+                <el-dropdown-item>Action 3</el-dropdown-item>
+                <el-dropdown-item disabled>Action 4</el-dropdown-item>
+                <el-dropdown-item divided>Action 5</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </span>
+      </div>
     </div>
     <div v-else>
       <RadarChart :chart-data="chartData" :scale-callback="scaleCallback"/>
@@ -60,7 +78,7 @@ export default defineComponent({
     const isEditing = ref(false)
     const decisionState = inject('decisionState', ref<DecisionChart[]>())
     const defaultDecisionChart = { name: '', values: [{ label: '', value: '', numericValue: 0 }] }
-    const decision = decisionState.value ? decisionState.value.find((d: DecisionChart) => d.id === props.decisionId) || defaultDecisionChart : defaultDecisionChart
+    const decision = (decisionState.value && decisionState.value.find((d: DecisionChart) => d.id === props.decisionId)) || defaultDecisionChart
     const decisionName = ref(decision.name)
     const chartData = computed(() => {
       return {
@@ -94,7 +112,7 @@ export default defineComponent({
       }
     }
 
-    return { decisionName, isEditing, confirmEdit, discardEdit, enableEdit, chartData, scaleCallback, removeDecisionItem }
+    return { decision, decisionName, isEditing, confirmEdit, discardEdit, enableEdit, chartData, scaleCallback, removeDecisionItem }
   }
 })
 </script>
