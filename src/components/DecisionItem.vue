@@ -1,72 +1,27 @@
 <template>
-  <el-card class="box-card">
-    <template #header>
-      <div class="card-header">
-        <template v-if="isEditing">
-          <el-input
-            v-model="decisionName"
-            placeholder="Decision name"
-            clearable
-          />
-          <i
-            @click="confirmEdit"
-            class="el-icon-check"
-          />
-          <i
-            @click="discardEdit"
-            class="el-icon-close"
-          />
-        </template>
-        <template v-else>
-          <span>{{ decisionName }}</span>
-          <i
-            @click="enableEdit"
-            class="el-icon-edit"
-          />
-          <i
-            @click="removeDecisionItem"
-            class="el-icon-delete"
-          />
-        </template>
-
-      </div>
-    </template>
-    <div v-if="isEditing">
-      <div v-for="value in decision.values" :key="value.label">
-        <span>{{ value.label }}:</span>
-        <span>
-          <el-dropdown>
-            <span class="el-dropdown-link">
-              {{ value.value }}<i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item>Action 1</el-dropdown-item>
-                <el-dropdown-item>Action 2</el-dropdown-item>
-                <el-dropdown-item>Action 3</el-dropdown-item>
-                <el-dropdown-item disabled>Action 4</el-dropdown-item>
-                <el-dropdown-item divided>Action 5</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-        </span>
-      </div>
-    </div>
-    <div v-else>
-      <RadarChart :chart-data="chartData" :scale-callback="scaleCallback"/>
-    </div>
-  </el-card>
+  <decision-item-display
+    v-if="!isEditing"
+    v-model:isEditing="isEditing"
+    :decision="decision"
+  />
+  <decision-item-editor
+    v-else
+    :decisionId="decision.id"
+    @closeEdit="isEditing = false"
+  />
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, inject, computed } from 'vue'
-import RadarChart from '@/components/RadarChart.vue'
-import { Axis, DecisionChart } from '@/types'
+import { DecisionChart } from '@/types'
+import DecisionItemDisplay from '@/components/DecisionItemDisplay.vue'
+import DecisionItemEditor from '@/components/DecisionItemEditor.vue'
 
 export default defineComponent({
   name: 'DecisionItem',
   components: {
-    RadarChart
+    DecisionItemEditor,
+    DecisionItemDisplay
   },
   props: {
     decisionId: {
@@ -79,40 +34,14 @@ export default defineComponent({
     const decisionState = inject('decisionState', ref<DecisionChart[]>())
     const defaultDecisionChart = { name: '', values: [{ label: '', value: '', numericValue: 0 }] }
     const decision = (decisionState.value && decisionState.value.find((d: DecisionChart) => d.id === props.decisionId)) || defaultDecisionChart
-    const decisionName = ref(decision.name)
-    const chartData = computed(() => {
-      return {
-        labels: decision.values.map((v) => v.label),
-        datasets: [
-          {
-            label: decision.name,
-            backgroundColor: '#f87979',
-            data: decision.values.map((v) => v.numericValue)
-          }
-        ]
-      }
-    })
-    const enableEdit = () => {
-      isEditing.value = true
-    }
-    const confirmEdit = () => {
-      decision.name = decisionName.value
-      isEditing.value = false
-    }
-    const discardEdit = () => {
-      isEditing.value = false
-    }
 
-    const scaleCallback = (value: number/* , index, values */) => {
-      return value + 'asdadsd'
-    }
     const removeDecisionItem = () => {
       if (decisionState.value) {
         decisionState.value = decisionState.value.filter((d: DecisionChart) => d.id !== props.decisionId)
       }
     }
 
-    return { decision, decisionName, isEditing, confirmEdit, discardEdit, enableEdit, chartData, scaleCallback, removeDecisionItem }
+    return { decision, isEditing, removeDecisionItem }
   }
 })
 </script>
