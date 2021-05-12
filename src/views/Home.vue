@@ -10,11 +10,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, provide, ref, watchEffect } from 'vue'
+import { defineComponent, onMounted, provide, ref, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n' // @ is an alias to /src
-import { Axis, DecisionChart } from '@/types'
+import { Axis, DecisionChart, AxisValue } from '@/types'
 import DecisionSchema from '@/components/DecisionSchema.vue'
 import DecisionItemList from '@/components/DecisionItemList.vue'
+import { getNumericValueForAxis } from '@/common/axis'
 
 export default defineComponent({
   name: 'Home',
@@ -34,6 +35,25 @@ export default defineComponent({
     provide('axisSchemaState', axisSchemaState)
     provide('decisionState', decisionState)
 
+    watch(axisSchemaState, (newAxisSchema) => {
+      decisionState.value.forEach((d: DecisionChart) => {
+        // Remove not defined values
+        d.values = d.values.filter((axisValue: AxisValue) => newAxisSchema.map((axis: Axis) => axis.id).includes(axisValue.axisId))
+
+        // Remove values that do not exist anymore and update numericValue in case value schema has been modified for axis
+        d.values.forEach((axisValue: AxisValue) => {
+          const newAxis = newAxisSchema.find((axis: Axis) => axis.id === axisValue.axisId)
+          if (newAxis) {
+            if (!newAxis.values.includes(axisValue.value)) {
+              axisValue.value = newAxis.values[0]
+              axisValue.numericValue = getNumericValueForAxis(newAxis.values[0], newAxis)
+            } else {
+              axisValue.numericValue = getNumericValueForAxis(axisValue.value, newAxis)
+            }
+          }
+        })
+      })
+    })
     watchEffect(() => {
       if (axisSchemaState.value.length) {
         localStorage.setItem('axisSchemaState', JSON.stringify(axisSchemaState.value))
