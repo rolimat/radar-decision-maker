@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject, computed } from 'vue'
+import { defineComponent, ref, inject } from 'vue'
 import { DecisionChart } from '@/types'
 import DecisionItemDisplay from '@/components/DecisionItemDisplay.vue'
 import DecisionItemEditor from '@/components/DecisionItemEditor.vue'

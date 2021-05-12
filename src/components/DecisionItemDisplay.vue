@@ -54,7 +54,7 @@ export default defineComponent({
       }
     })
 
-    const scaleCallback = (value: number/* , index, values */) => {
+    const scaleCallback = (/* value: number , index, values */) => {
       return '' // value + 'asdadsd'
     }
 

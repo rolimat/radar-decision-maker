@@ -22,10 +22,8 @@
 
 <script lang="ts">
 import { defineComponent, inject, ref } from 'vue'
-import { Axis, AxisValue, DecisionChart } from '@/types'
-import { generateUuid } from '@/common/uuid'
+import { DecisionChart } from '@/types'
 import DecisionItem from '@/components/DecisionItem.vue'
-import { getNumericValueForAxis } from '@/common/axis'
 import DecisionItemAdd from '@/components/DecisionItemAdd.vue'
 export default defineComponent({
   name: 'DecisionItemList',

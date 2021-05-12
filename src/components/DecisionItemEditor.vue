@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject, computed, PropType } from 'vue'
+import { defineComponent, ref, inject } from 'vue'
 import { Axis, AxisValue, DecisionChart } from '@/types'
 import { getNumericValueForAxis } from '@/common/axis'
 export default defineComponent({
