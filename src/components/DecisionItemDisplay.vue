@@ -14,7 +14,7 @@
       </div>
     </template>
     <div>
-      <RadarChart :chart-data="chartData" :scale-callback="scaleCallback"/>
+      <RadarChart :key="decision.id" :chart-data="chartData" :scale-callback="scaleCallback"/>
     </div>
   </el-card>
 </template>

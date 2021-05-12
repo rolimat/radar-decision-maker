@@ -2,6 +2,7 @@
   <decision-item-display
     v-if="!isEditing"
     v-model:isEditing="isEditing"
+    :key="decision.id"
     :decision="decision"
   />
   <decision-item-editor
