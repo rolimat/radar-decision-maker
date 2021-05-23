@@ -1,10 +1,15 @@
-<script>
-import { defineComponent } from 'vue'
-import { Radar } from 'vue3-chart-v2'
+<template>
+  <vue3-chart-js v-bind='{ ...radarChart }' />
+</template>
 
-export default defineComponent({
+<script>
+import Vue3ChartJs from '@j-t-mcc/vue3-chartjs'
+
+export default {
   name: 'RadarChart',
-  extends: Radar,
+  components: {
+    Vue3ChartJs
+  },
   props: {
     decision: {
       type: Object,
@@ -15,42 +20,53 @@ export default defineComponent({
       default: () => (value) => value
     }
   },
-  computed: {
-    chartOptions () {
-      return {
+  setup (props) {
+    const radarChart = {
+      type: 'radar',
+      options: {
+        min: 0,
+        max: 200,
         responsive: true,
+        // plugins: {
+        //   legend: {
+        //     position: 'bottom'
+        //   }
+        // },
         scale: {
           ticks: {
             beginAtZero: true,
-            min: 0,
             max: 100,
-            stepSize: 30,
-            userCallback: this.scaleCallback
-          },
-          pointLabels: {
-            fontSize: 18
+            min: 0,
+            stepSize: 20
           }
         },
-        legend: {
-          position: 'bottom'
+        scales: {
+          r: {
+            beginAtZero: true,
+            angleLines: {
+              display: false
+            },
+            min: 0,
+            max: 100
+          }
         }
-      }
-    },
-    chartData () {
-      return {
-        labels: this.decision.values.map((v) => v.label),
+      },
+      data: {
+        labels: props.decision.values.map((v) => v.label),
         datasets: [
           {
-            label: this.decision.name,
-            backgroundColor: '#f87979',
-            data: this.decision.values.map((v) => v.numericValue)
+            label: props.decision.name,
+            data: props.decision.values.map((v) => v.numericValue),
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)'
           }
         ]
       }
     }
-  },
-  mounted () {
-    this.renderChart(this.chartData, this.chartOptions)
+
+    return {
+      radarChart
+    }
   }
-})
+}
 </script>
