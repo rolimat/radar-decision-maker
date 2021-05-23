@@ -37,19 +37,16 @@ export default defineComponent({
 
     watch(axisSchemaState, (newAxisSchema) => {
       decisionState.value.forEach((d: DecisionChart) => {
-        // Remove not defined values
-        d.values = d.values.filter((axisValue: AxisValue) => newAxisSchema.map((axis: Axis) => axis.id).includes(axisValue.axisId))
-
-        // Remove values that do not exist anymore and update numericValue in case value schema has been modified for axis
-        d.values.forEach((axisValue: AxisValue) => {
-          const newAxis = newAxisSchema.find((axis: Axis) => axis.id === axisValue.axisId)
-          if (newAxis) {
-            if (!newAxis.values.includes(axisValue.value)) {
-              axisValue.value = newAxis.values[0]
-              axisValue.numericValue = getNumericValueForAxis(newAxis.values[0], newAxis)
-            } else {
-              axisValue.numericValue = getNumericValueForAxis(axisValue.value, newAxis)
-            }
+        // Update decision axis values according to the new schema
+        d.values = newAxisSchema.map((axis: Axis) => {
+          const axisValue = d.values.find((v: AxisValue) => v.axisId === axis.id)
+          const value = axisValue ? axisValue.value : axis.values[0]
+          const numericValue = getNumericValueForAxis(value, axis)
+          return {
+            axisId: axis.id,
+            label: axis.name,
+            value,
+            numericValue
           }
         })
       })
