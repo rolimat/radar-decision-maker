@@ -14,13 +14,13 @@
       </div>
     </template>
     <div>
-      <RadarChart :key="decision.id" :chart-data="chartData" :scale-callback="scaleCallback"/>
+      <RadarChart :key="decision.id" :decision="decision" :scale-callback="scaleCallback"/>
     </div>
   </el-card>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject, computed, PropType } from 'vue'
+import { defineComponent, ref, inject, PropType } from 'vue'
 import RadarChart from '@/components/RadarChart.vue'
 import { DecisionChart } from '@/types'
 
@@ -41,18 +41,6 @@ export default defineComponent({
   },
   setup (props, { emit }) {
     const decisionState = inject('decisionState', ref<DecisionChart[]>())
-    const chartData = computed(() => {
-      return {
-        labels: props.decision.values.map((v) => v.label),
-        datasets: [
-          {
-            label: props.decision.name,
-            backgroundColor: '#f87979',
-            data: props.decision.values.map((v) => v.numericValue)
-          }
-        ]
-      }
-    })
 
     const scaleCallback = (/* value: number , index, values */) => {
       return '' // value + 'asdadsd'
@@ -68,7 +56,7 @@ export default defineComponent({
       emit('update:isEditing', true)
     }
 
-    return { chartData, enableEdit, removeDecisionItem, scaleCallback }
+    return { enableEdit, removeDecisionItem, scaleCallback }
   }
 })
 </script>

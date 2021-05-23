@@ -6,7 +6,7 @@ export default defineComponent({
   name: 'RadarChart',
   extends: Radar,
   props: {
-    chartData: {
+    decision: {
       type: Object,
       required: true
     },
@@ -34,6 +34,18 @@ export default defineComponent({
         legend: {
           position: 'bottom'
         }
+      }
+    },
+    chartData () {
+      return {
+        labels: this.decision.values.map((v) => v.label),
+        datasets: [
+          {
+            label: this.decision.name,
+            backgroundColor: '#f87979',
+            data: this.decision.values.map((v) => v.numericValue)
+          }
+        ]
       }
     }
   },
